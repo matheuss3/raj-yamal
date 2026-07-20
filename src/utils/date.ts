@@ -1,7 +1,5 @@
 import type { Purchase } from "../../shared/types";
 
-const monthLabelFormatter = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" });
-
 /** Data de hoje no formato YYYY-MM-DD (fuso local). */
 export function todayISODate(): string {
   const now = new Date();
@@ -19,11 +17,10 @@ export function monthKeyFromDate(date: string): string {
   return date.slice(0, 7);
 }
 
-/** Formata uma chave de mês (YYYY-MM) como "Julho de 2026". */
+/** Formata uma chave de mês (YYYY-MM) como "07/2026". */
 export function formatMonthLabel(monthKey: string): string {
-  const [year, month] = monthKey.split("-").map(Number);
-  const label = monthLabelFormatter.format(new Date(year, month - 1, 1));
-  return label.charAt(0).toUpperCase() + label.slice(1);
+  const [year, month] = monthKey.split("-");
+  return `${month}/${year}`;
 }
 
 /** Lista as chaves de mês presentes nas compras, mais recentes primeiro, garantindo que `mustInclude` apareça. */

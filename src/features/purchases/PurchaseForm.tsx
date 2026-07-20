@@ -58,25 +58,29 @@ export function PurchaseForm({ tags, onSubmit }: PurchaseFormProps) {
         />
       </label>
 
-      <CurrencyInput id="purchase-amount" label="Valor" value={amountCents} onChange={setAmountCents} />
+      <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+        <div style={{ flex: 1, minWidth: "8rem" }}>
+          <CurrencyInput id="purchase-amount" label="Valor" value={amountCents} onChange={setAmountCents} />
+        </div>
 
-      <label htmlFor="purchase-date" style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-        Data
-        <input
-          id="purchase-date"
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          required
-          style={{
-            background: "var(--bg-1)",
-            color: "var(--text-primary)",
-            border: "none",
-            borderRadius: "var(--radius-sm)",
-            padding: "0.75rem 1rem",
-          }}
-        />
-      </label>
+        <label htmlFor="purchase-date" style={{ flex: 1, minWidth: "8rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
+          Data
+          <input
+            id="purchase-date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            required
+            style={{
+              background: "var(--bg-1)",
+              color: "var(--text-primary)",
+              border: "none",
+              borderRadius: "var(--radius-sm)",
+              padding: "0.75rem 1rem",
+            }}
+          />
+        </label>
+      </div>
 
       {activeTags.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
