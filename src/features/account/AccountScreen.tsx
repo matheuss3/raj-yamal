@@ -7,10 +7,6 @@ interface AccountScreenProps {
   onSignOut: () => void;
 }
 
-function maskHash(hash: string): string {
-  return hash.replace(/[^-]/g, "•");
-}
-
 const fieldStyle: React.CSSProperties = {
   background: "var(--bg-1)",
   color: "var(--text-primary)",
@@ -98,25 +94,49 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
           </p>
         )}
 
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            background: "var(--bg-1)",
-            borderRadius: "var(--radius-sm)",
-            padding: "0.75rem 1rem",
-          }}
-        >
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "1.1rem", wordBreak: "break-all" }}>
-            {revealed ? accountHash : maskHash(accountHash)}
-          </span>
-        </div>
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
+            <input
+              type={revealed ? "text" : "password"}
+              value={accountHash}
+              readOnly
+              aria-label="Seu código de acesso"
+              style={{
+                ...fieldStyle,
+                width: "100%",
+                fontFamily: "var(--font-mono)",
+                fontSize: "1.1rem",
+                paddingRight: "3.25rem",
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setRevealed((r) => !r)}
+              aria-label={revealed ? "Ocultar código" : "Mostrar código"}
+              style={{
+                position: "absolute",
+                right: 0,
+                top: 0,
+                bottom: 0,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "1.1rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {revealed ? "🙈" : "👁"}
+            </button>
+          </div>
 
-        <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-          <button type="button" className="btn" onClick={() => setRevealed((r) => !r)}>
-            {revealed ? "Ocultar" : "Mostrar"}
-          </button>
-          <button type="button" className="btn" onClick={handleCopy}>
+          <button
+            type="button"
+            className="btn"
+            onClick={handleCopy}
+            style={{ flexShrink: 0, color: copyFeedback === "Copiado!" ? "var(--success)" : undefined }}
+          >
             {copyFeedback ?? "Copiar"}
           </button>
         </div>
