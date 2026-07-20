@@ -30,7 +30,7 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
       className="btn"
       aria-selected={active}
       onClick={onClick}
-      style={{ background: active ? "var(--accent)" : undefined, color: active ? "#ffffff" : undefined }}
+      style={{ fontFamily: "var(--font-mono)", background: active ? "var(--accent)" : undefined, color: active ? "#ffffff" : undefined }}
     >
       {children}
     </button>

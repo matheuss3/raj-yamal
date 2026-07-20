@@ -59,7 +59,6 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
                     style={{
                       fontSize: "0.75rem",
                       color: "var(--text-dim)",
-                      fontFamily: "var(--font-mono)",
                       flexShrink: 0,
                       whiteSpace: "nowrap",
                     }}

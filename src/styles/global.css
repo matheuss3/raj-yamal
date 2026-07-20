@@ -159,9 +159,7 @@ a,
   }
 }
 
-/* Select customizado (Radix UI Select), mesma linguagem visual do .btn/inputs.
-   Único lugar que ainda usa a fonte mono do ZeroDelay pros valores exibidos —
-   o resto da UI foi pra fonte sans (ver body em cima). */
+/* Select customizado (Radix UI Select), mesma linguagem visual do .btn/inputs. */
 .select-trigger {
   display: inline-flex;
   align-items: center;
@@ -172,7 +170,6 @@ a,
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
   cursor: pointer;
-  font-family: var(--font-mono);
 }
 
 .select-content {
@@ -196,7 +193,6 @@ a,
   border-radius: var(--radius-sm);
   cursor: pointer;
   outline: none;
-  font-family: var(--font-mono);
 }
 
 .select-item[data-highlighted] {

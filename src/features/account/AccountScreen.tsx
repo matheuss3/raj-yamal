@@ -131,7 +131,6 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
               style={{
                 ...fieldStyle,
                 width: "100%",
-                fontFamily: "var(--font-mono)",
                 fontSize: "1.1rem",
                 paddingRight: "3.25rem",
               }}
@@ -179,7 +178,7 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
             value={otherHash}
             onChange={(e) => setOtherHash(e.target.value)}
             placeholder="xxxx-xxxx-xxxx-xxxx"
-            style={{ ...fieldStyle, flex: 1, minWidth: 0, fontFamily: "var(--font-mono)" }}
+            style={{ ...fieldStyle, flex: 1, minWidth: 0 }}
           />
           <button type="submit" className="btn btn--accent" disabled={switching || !otherHash.trim()}>
             {switching ? "Entrando…" : "Entrar"}
@@ -251,7 +250,7 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
               >
                 <Icon name={actionIcon(entry.message)} size={20} style={{ color: "var(--text-dim)", flexShrink: 0 }} />
                 <span style={{ minWidth: 0, overflowWrap: "break-word", flex: 1 }}>{entry.message}</span>
-                <span style={{ color: "var(--text-dim)", fontFamily: "var(--font-mono)", fontSize: "0.75rem", flexShrink: 0 }}>
+                <span style={{ color: "var(--text-dim)", fontSize: "0.75rem", flexShrink: 0 }}>
                   {logTimeFormatter.format(new Date(entry.at))}
                 </span>
               </li>
