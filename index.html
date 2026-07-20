@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>raj-yamal — Gastos da família</title>
+    <script>
+      // Aplica o tema salvo antes do primeiro paint, evitando flash do tema errado.
+      // Chave duplicada intencionalmente de src/features/theme/ThemeProvider.tsx
+      // (THEME_STORAGE_KEY) — um script inline não pode importar módulos TS.
+      (function () {
+        try {
+          var stored = localStorage.getItem("raj-yamal:theme");
+          if (stored === "dark" || stored === "light") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (e) {
+          /* localStorage indisponível (ex: modo privado) — segue com o tema do sistema */
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+/* Departure Mono — asset copiado literalmente de github.com/joaogfc/ZeroDelay (fonts/),
+   licenciado sob SIL Open Font License 1.1 (ver src/assets/fonts/OFL.txt). */
+@font-face {
+  font-family: "Departure Mono";
+  src: url("../assets/fonts/DepartureMono-Regular.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}

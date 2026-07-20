@@ -1,0 +1,30 @@
+Descrição
+Sistema de gestão de gastos mensais para controle financeiro familiar.
+
+
+Histórias de usuário
+Como um usuário, eu quero poder informar minhas compras, para que eu possa ter controle do que gastei no mês.
+Como um usuário, eu quero filtrar os gastos nos meses do ano, para que eu possa entender se estou gastando mais ou menos.
+Como um usuário, eu quero visualizar meu gasto total, para que não precise ficar somando os gastos.
+Como um usuário, eu quero criar etiquetas para categorizar minhas compras, para que eu entenda onde estou gastando meu dinheiro por uma visão um pouco mais macro.
+Como um usuário, eu quero colocar meus gastos ideais por etiqueta/categoria, para que eu entenda no mommento da compr de algo ver se tenho dinheiro sobrando ou não.
+Como um usuário, eu quero alterar o sistema entre modos claros e escuros, para que a noite não force muito minhas vistas com o modo mais agradável
+Como um usuário, eu quero configurar uma conta, para que eu possa acessar meus gastos no celular e no computador
+Como um usuário, eu quero colorir as etiquetas, para facilitar a identificação das categorias
+
+Restrições
+Deve ser aplicação simples com persistência num via arquivo tipo jsondb
+A aplicação será publicada no netlify
+A configuração da conta será somente por usuário sem senha o sistema gerará um hash e colocará em algum lugar da aplicação para o usuário copiar e acessar os dados em outro dispositivo, se desejar.um login e acessará a conta, e será guardado em localstorage mesmo, se não houver nada no localstorage outro hash será gerado
+Será um sistema web somente para minha família
+O input de valor deve ser igual dos aplicativos de banco tipo nubank iniciando das unidades de centavo, dezena, real... etc
+Utilizar como modelo de estilo (css, fontes, cores, botões) este sistema https://github.com/joaogfc/ZeroDelay
+O usuário deve fazer no máximo 2 cliques por ação
+O sistema deve utilizar como premissa para os estilos o mobile first
+Pensar em acessibilidade o sistema deve permitir dar um zoom de até 200%
+
+
+
+Futuro
+O sistema poderá se estender para algo maior e futuramente faremos um login com senha autenticação refreshtoken, para executar em android e apple, mas inicialmente será desenvolvido somente para minha família
+

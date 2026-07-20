@@ -1,0 +1,82 @@
+:root {
+  /* cores — dark (padrão) */
+  --bg-0: #0f0f0f;
+  --bg-1: #1c1c1c;
+  --bg-2: #272727;
+  --bg-3: #323232;
+  --text-primary: #f1f1f1;
+  --text-dim: #aaaaaa;
+  --text-faint: #717171;
+  /* #eb002f: vermelho original do ZeroDelay (#ff0033) escurecido ~8% — o
+     original só rende 3.96:1 com texto branco em cima (falha AA 4.5:1) em
+     botões/abas selecionadas; esse ajuste discreto passa em 4.59:1 sem sair
+     visivelmente da identidade de referência. */
+  --accent: #eb002f;
+  --accent-strong: #ff2d52;
+  --success: #2ba640;
+  --warning: #ffc43d;
+  --accent-soft-alpha: 0.14;
+  --accent-glow-alpha: 0.35;
+
+  /* tipografia */
+  --font-sans: "Roboto", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "Departure Mono", ui-monospace, monospace; /* valores monetários */
+
+  /* raio */
+  --radius: 12px;
+  --radius-sm: 9px;
+
+  /* motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-spring: cubic-bezier(0.2, 0.9, 0.25, 1.18);
+  --transition-color: 160ms;
+  --transition-transform: 120ms;
+}
+
+/*
+ * success/warning/accent-strong ficam mais escuros no tema claro: os valores
+ * originais (calibrados pro fundo escuro do ZeroDelay) caem para 1.5–3.5:1
+ * de contraste sobre um fundo claro quando usados como texto — abaixo do
+ * mínimo AA de 4.5:1. Os valores abaixo foram calculados pra passar em
+ * ~4.5:1+ sobre --bg-1 (#f9f9f9) mantendo a mesma família de cor.
+ */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg-0: #ffffff;
+    --bg-1: #f9f9f9;
+    --bg-2: #f0f0f0;
+    --bg-3: #e7e7e7;
+    --text-primary: #0f0f0f;
+    --text-dim: #606060;
+    --text-faint: #909090;
+    --accent-strong: #db2747;
+    --success: #228132;
+    --warning: #8f6e22;
+    --accent-soft-alpha: 0.1;
+  }
+}
+
+:root[data-theme="light"] {
+  --bg-0: #ffffff;
+  --bg-1: #f9f9f9;
+  --bg-2: #f0f0f0;
+  --bg-3: #e7e7e7;
+  --text-primary: #0f0f0f;
+  --text-dim: #606060;
+  --text-faint: #909090;
+  --accent-strong: #db2747;
+  --success: #228132;
+  --warning: #8f6e22;
+  --accent-soft-alpha: 0.1;
+}
+
+:root[data-theme="dark"] {
+  --bg-0: #0f0f0f;
+  --bg-1: #1c1c1c;
+  --bg-2: #272727;
+  --bg-3: #323232;
+  --text-primary: #f1f1f1;
+  --text-dim: #aaaaaa;
+  --text-faint: #717171;
+  --accent-soft-alpha: 0.14;
+}
