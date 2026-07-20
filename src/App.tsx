@@ -129,12 +129,12 @@ function AppContent() {
       {view === "purchases" && (
         <>
           <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-end", flexWrap: "wrap" }}>
-            <button type="button" className="btn btn--accent" onClick={() => setShowAddPurchase(true)}>
-              + GASTO
-            </button>
             <div style={{ flex: 1, minWidth: "8rem" }}>
               <MonthFilter months={months} selected={selectedMonth} onSelect={setSelectedMonth} />
             </div>
+            <button type="button" className="btn btn--accent" onClick={() => setShowAddPurchase(true)}>
+              + GASTO
+            </button>
           </div>
 
           {tagsWithBudget.length > 0 && (
