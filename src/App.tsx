@@ -128,7 +128,14 @@ function AppContent() {
 
       {view === "purchases" && (
         <>
-          <MonthFilter months={months} selected={selectedMonth} onSelect={setSelectedMonth} />
+          <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-end", flexWrap: "wrap" }}>
+            <button type="button" className="btn btn--accent" onClick={() => setShowAddPurchase(true)}>
+              + GASTO
+            </button>
+            <div style={{ flex: 1, minWidth: "8rem" }}>
+              <MonthFilter months={months} selected={selectedMonth} onSelect={setSelectedMonth} />
+            </div>
+          </div>
 
           {tagsWithBudget.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -146,9 +153,6 @@ function AppContent() {
           <MonthTotalCard totalCents={totalCents} />
 
           <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-            <button type="button" className="btn btn--accent" onClick={() => setShowAddPurchase(true)}>
-              + Novo gasto
-            </button>
             <button type="button" className="btn" onClick={() => openPurchaseList(null)}>
               Ver gastos detalhados
             </button>
