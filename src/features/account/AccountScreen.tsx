@@ -1,9 +1,24 @@
 import { useState } from "react";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { Icon } from "../../components/Icon";
+import { Modal } from "../../components/Modal";
 import { getActionLog, logAction, type ActionLogEntry } from "../../utils/actionLog";
 
 const logTimeFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
+
+/** Ícone por tipo de ação, a partir do prefixo da mensagem registrada em logAction(). */
+function actionIcon(message: string): string {
+  if (message.startsWith("Gasto adicionado")) return "add_circle";
+  if (message.startsWith("Gasto excluído")) return "delete";
+  if (message.startsWith("Etiqueta do gasto")) return "sell";
+  if (message.startsWith("Etiqueta criada")) return "new_label";
+  if (message.startsWith("Etiqueta arquivada")) return "archive";
+  if (message.startsWith("Etiqueta desarquivada")) return "unarchive";
+  if (message.startsWith("Trocou de conta")) return "swap_horiz";
+  if (message.startsWith("Gerou novo código")) return "vpn_key";
+  if (message.startsWith("Saiu deste dispositivo")) return "logout";
+  return "history";
+}
 
 interface AccountScreenProps {
   accountHash: string;
@@ -33,6 +48,7 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
   const [justRotated, setJustRotated] = useState(false);
   const [showRotateConfirm, setShowRotateConfirm] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
 
   const [actionLog, setActionLog] = useState<ActionLogEntry[]>(getActionLog);
 
@@ -201,6 +217,21 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
         <p style={{ color: "var(--text-dim)", fontSize: "0.85rem", margin: 0 }}>
           Registrado só neste dispositivo (localStorage) — não é sincronizado com o servidor.
         </p>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => {
+            setActionLog(getActionLog());
+            setShowHistory(true);
+          }}
+          style={{ alignSelf: "flex-start" }}
+        >
+          <Icon name="history" size={18} />
+          Ver histórico
+        </button>
+      </section>
+
+      <Modal open={showHistory} onClose={() => setShowHistory(false)} title="Histórico local de ações">
         {actionLog.length === 0 ? (
           <p style={{ color: "var(--text-dim)" }}>Nenhuma ação registrada ainda.</p>
         ) : (
@@ -210,24 +241,24 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
                 key={`${entry.at}-${index}`}
                 style={{
                   display: "flex",
-                  justifyContent: "space-between",
-                  gap: "0.5rem 0.75rem",
-                  flexWrap: "wrap",
+                  alignItems: "center",
+                  gap: "0.6rem",
                   background: "var(--bg-1)",
                   borderRadius: "var(--radius-sm)",
                   padding: "0.6rem 0.85rem",
                   fontSize: "0.85rem",
                 }}
               >
-                <span style={{ minWidth: 0, overflowWrap: "break-word" }}>{entry.message}</span>
-                <span style={{ color: "var(--text-dim)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>
+                <Icon name={actionIcon(entry.message)} size={20} style={{ color: "var(--text-dim)", flexShrink: 0 }} />
+                <span style={{ minWidth: 0, overflowWrap: "break-word", flex: 1 }}>{entry.message}</span>
+                <span style={{ color: "var(--text-dim)", fontFamily: "var(--font-mono)", fontSize: "0.75rem", flexShrink: 0 }}>
                   {logTimeFormatter.format(new Date(entry.at))}
                 </span>
               </li>
             ))}
           </ul>
         )}
-      </section>
+      </Modal>
 
       <ConfirmDialog
         open={showRotateConfirm}

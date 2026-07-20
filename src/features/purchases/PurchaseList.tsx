@@ -4,6 +4,7 @@ import { AsyncButton } from "../../components/AsyncButton";
 import { Icon } from "../../components/Icon";
 import { TagPicker } from "../tags/TagPicker";
 import { formatCentsToBRL } from "../../utils/currency";
+import { formatDateShort } from "../../utils/date";
 
 interface PurchaseListProps {
   purchases: Purchase[];
@@ -51,10 +52,22 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
             }}
           >
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "0.5rem 0.75rem" }}>
-              <div style={{ minWidth: 0, overflowWrap: "break-word" }}>
-                <div>{purchase.description}</div>
-                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", color: "var(--text-dim)" }}>
-                  <span>{purchase.date}</span>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: "0.5rem" }}>
+                  <span style={{ minWidth: 0, overflowWrap: "break-word" }}>{purchase.description}</span>
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--text-dim)",
+                      fontFamily: "var(--font-mono)",
+                      flexShrink: 0,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {formatDateShort(purchase.date)}
+                  </span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", fontSize: "0.8rem", color: "var(--text-dim)", marginTop: "0.25rem" }}>
                   {tag && (
                     <span style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
                       <span

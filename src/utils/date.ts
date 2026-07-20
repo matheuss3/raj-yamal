@@ -23,6 +23,18 @@ export function formatMonthLabel(monthKey: string): string {
   return `${month}/${year}`;
 }
 
+/** Formata uma data YYYY-MM-DD como "20/07" — compacta para caber ao lado da descrição no card. */
+export function formatDateShort(date: string): string {
+  const [, month, day] = date.split("-");
+  return `${day}/${month}`;
+}
+
+/** Formata uma data YYYY-MM-DD como "20/07/2026". */
+export function formatDateFull(date: string): string {
+  const [year, month, day] = date.split("-");
+  return `${day}/${month}/${year}`;
+}
+
 /** Lista as chaves de mês presentes nas compras, mais recentes primeiro, garantindo que `mustInclude` apareça. */
 export function listAvailableMonths(purchases: Purchase[], mustInclude?: string): string[] {
   const months = new Set(purchases.map((p) => monthKeyFromDate(p.date)));

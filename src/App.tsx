@@ -160,7 +160,7 @@ function AppContent() {
               <MonthFilter months={months} selected={selectedMonth} onSelect={setSelectedMonth} />
             </div>
             <button type="button" className="btn btn--accent" onClick={() => setShowAddPurchase(true)}>
-              + GASTO
+              + Gasto
             </button>
           </div>
 

@@ -20,6 +20,10 @@
 
   /* tipografia */
   --font-mono: "Departure Mono", ui-monospace, monospace;
+  /* fonte do corpo: mais legível/neutra que o mono do ZeroDelay — o mono fica
+     reservado a valores monetários e ao wordmark, mantendo só um toque da
+     identidade original em vez de dominar a tela inteira. */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* raio */
   --radius: 12px;

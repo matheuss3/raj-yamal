@@ -29,9 +29,14 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
         inset: 0,
         background: "rgba(0, 0, 0, 0.6)",
         display: "flex",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
         padding: "1rem",
+        // rola o overlay inteiro (não o conteúdo do dialog) — com o modal
+        // colado no topo, o teclado virtual encolhe a viewport visual e o
+        // navegador rola o campo focado até ela, em vez de esconder os
+        // campos de baixo atrás do teclado (problema com alignItems: center).
+        overflowY: "auto",
         zIndex: 100,
       }}
     >
@@ -46,8 +51,9 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
           padding: "1.25rem",
           width: "100%",
           maxWidth: "32rem",
-          maxHeight: "85vh",
-          overflowY: "auto",
+          marginTop: "max(1rem, env(safe-area-inset-top))",
+          marginBottom: "1rem",
+          flexShrink: 0,
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
