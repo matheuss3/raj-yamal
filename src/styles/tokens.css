@@ -19,8 +19,7 @@
   --accent-glow-alpha: 0.35;
 
   /* tipografia */
-  --font-sans: "Roboto", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: "Departure Mono", ui-monospace, monospace; /* valores monetários */
+  --font-mono: "Departure Mono", ui-monospace, monospace;
 
   /* raio */
   --radius: 12px;

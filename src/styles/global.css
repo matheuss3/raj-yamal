@@ -13,9 +13,10 @@ body {
   min-height: 100dvh;
   background: var(--bg-0);
   color: var(--text-primary);
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-size: 1rem;
   line-height: 1.5;
+  text-transform: uppercase;
   transition: background-color var(--transition-color) var(--ease-standard),
     color var(--transition-color) var(--ease-standard);
 }
@@ -38,6 +39,7 @@ select,
 textarea {
   font: inherit;
   color: inherit;
+  text-transform: inherit;
 }
 
 /* mobile-first: containers fluidos, nunca largura fixa em px */
