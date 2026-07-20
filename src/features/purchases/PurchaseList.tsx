@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Purchase, Tag } from "../../../shared/types";
+import { Icon } from "../../components/Icon";
 import { TagPicker } from "../tags/TagPicker";
 import { formatCentsToBRL } from "../../utils/currency";
 
@@ -58,7 +59,7 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
                     aria-label={`Editar etiqueta de: ${purchase.description}`}
                     style={{ minHeight: "1.75rem", minWidth: "1.75rem", padding: "0.25rem" }}
                   >
-                    ✎
+                    <Icon name="edit" size={16} />
                   </button>
                 </div>
               </div>
@@ -71,7 +72,7 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
                   onClick={() => onDelete(purchase.id)}
                   aria-label={`Excluir gasto: ${purchase.description}`}
                 >
-                  ×
+                  <Icon name="delete" size={18} />
                 </button>
               </div>
             </div>

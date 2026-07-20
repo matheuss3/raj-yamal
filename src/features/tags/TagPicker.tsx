@@ -10,7 +10,21 @@ interface TagPickerProps {
 
 export function TagPicker({ tags, selectedTagId, onSelect, ariaLabel = "Etiqueta" }: TagPickerProps) {
   return (
-    <div role="group" aria-label={ariaLabel} style={{ display: "flex", gap: "0.5rem", overflowX: "auto", minWidth: 0 }}>
+    // overflow-x: auto força overflow-y a "auto" também, o que corta o box-shadow
+    // (3px 3px) do .btn na borda inferior/direita — a margem negativa compensa o
+    // padding extra pra não deslocar o layout ao redor.
+    <div
+      role="group"
+      aria-label={ariaLabel}
+      style={{
+        display: "flex",
+        gap: "0.5rem",
+        overflowX: "auto",
+        minWidth: 0,
+        padding: "0 0.25rem 0.25rem 0",
+        margin: "0 -0.25rem -0.25rem 0",
+      }}
+    >
       <button
         type="button"
         className="btn"

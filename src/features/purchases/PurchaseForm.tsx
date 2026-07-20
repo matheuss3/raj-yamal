@@ -93,7 +93,7 @@ export function PurchaseForm({ tags, onSubmit }: PurchaseFormProps) {
       {error && <p style={{ color: "var(--accent-strong)" }}>{error}</p>}
 
       <button type="submit" className="btn btn--accent" disabled={!canSubmit}>
-        {submitting ? "Salvando…" : "Salvar gasto"}
+        {submitting ? "Salvando…" : "Confirmar"}
       </button>
     </form>
   );

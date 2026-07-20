@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { ConfirmDialog } from "../../components/ConfirmDialog";
+import { Icon } from "../../components/Icon";
 
 interface AccountScreenProps {
   accountHash: string;
@@ -26,6 +28,8 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
   const [rotating, setRotating] = useState(false);
   const [rotateError, setRotateError] = useState<string>();
   const [justRotated, setJustRotated] = useState(false);
+  const [showRotateConfirm, setShowRotateConfirm] = useState(false);
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
   async function handleCopy() {
     try {
@@ -53,12 +57,8 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
     }
   }
 
-  async function handleRotate() {
-    const confirmed = window.confirm(
-      "Gerar um novo código de acesso? O código atual deixa de funcionar imediatamente. Seus dados são preservados — copie o novo código antes de sair desta tela.",
-    );
-    if (!confirmed) return;
-
+  async function confirmRotate() {
+    setShowRotateConfirm(false);
     setRotating(true);
     setRotateError(undefined);
     try {
@@ -72,11 +72,9 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
     }
   }
 
-  function handleSignOut() {
-    const confirmed = window.confirm(
-      "Sair deste dispositivo? Seus dados continuam salvos, mas guarde o código de acesso antes — sem ele você não recupera esta conta.",
-    );
-    if (confirmed) onSignOut();
+  function confirmSignOut() {
+    setShowSignOutConfirm(false);
+    onSignOut();
   }
 
   return (
@@ -127,7 +125,7 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
                 justifyContent: "center",
               }}
             >
-              {revealed ? "🙈" : "👁"}
+              <Icon name={revealed ? "visibility_off" : "visibility"} />
             </button>
           </div>
 
@@ -167,17 +165,43 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
           Se você acha que alguém mais teve acesso ao seu código, gere um novo. Seus dados são preservados, mas o
           código antigo para de funcionar.
         </p>
-        <button type="button" className="btn" onClick={handleRotate} disabled={rotating} style={{ alignSelf: "flex-start" }}>
+        <button
+          type="button"
+          className="btn"
+          onClick={() => setShowRotateConfirm(true)}
+          disabled={rotating}
+          style={{ alignSelf: "flex-start" }}
+        >
           {rotating ? "Gerando…" : "Gerar novo código"}
         </button>
         {rotateError && <p style={{ color: "var(--accent-strong)" }}>{rotateError}</p>}
       </section>
 
       <section>
-        <button type="button" className="btn" onClick={handleSignOut}>
+        <button type="button" className="btn" onClick={() => setShowSignOutConfirm(true)}>
           Sair deste dispositivo
         </button>
       </section>
+
+      <ConfirmDialog
+        open={showRotateConfirm}
+        title="Gerar novo código?"
+        message="O código atual deixa de funcionar imediatamente. Seus dados são preservados — copie o novo código antes de sair desta tela."
+        confirmLabel="Gerar novo código"
+        danger
+        onConfirm={confirmRotate}
+        onCancel={() => setShowRotateConfirm(false)}
+      />
+
+      <ConfirmDialog
+        open={showSignOutConfirm}
+        title="Sair deste dispositivo?"
+        message="Seus dados continuam salvos, mas guarde o código de acesso antes — sem ele você não recupera esta conta."
+        confirmLabel="Sair"
+        danger
+        onConfirm={confirmSignOut}
+        onCancel={() => setShowSignOutConfirm(false)}
+      />
     </div>
   );
 }

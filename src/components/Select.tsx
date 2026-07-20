@@ -1,4 +1,5 @@
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { Icon } from "./Icon";
 
 export interface SelectOption {
   value: string;
@@ -24,21 +25,29 @@ export function Select({ id, ariaLabel, ariaLabelledBy, value, onChange, options
         aria-labelledby={ariaLabelledBy}
       >
         <SelectPrimitive.Value />
-        <SelectPrimitive.Icon aria-hidden="true">▾</SelectPrimitive.Icon>
+        <SelectPrimitive.Icon aria-hidden="true">
+          <Icon name="expand_more" size={18} />
+        </SelectPrimitive.Icon>
       </SelectPrimitive.Trigger>
 
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content className="select-content" position="popper" sideOffset={4}>
-          <SelectPrimitive.ScrollUpButton className="select-scroll-button">▴</SelectPrimitive.ScrollUpButton>
+          <SelectPrimitive.ScrollUpButton className="select-scroll-button">
+            <Icon name="expand_less" size={18} />
+          </SelectPrimitive.ScrollUpButton>
           <SelectPrimitive.Viewport className="select-viewport">
             {options.map((option) => (
               <SelectPrimitive.Item key={option.value} value={option.value} className="select-item">
                 <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
-                <SelectPrimitive.ItemIndicator aria-hidden="true">✓</SelectPrimitive.ItemIndicator>
+                <SelectPrimitive.ItemIndicator aria-hidden="true">
+                  <Icon name="check" size={18} />
+                </SelectPrimitive.ItemIndicator>
               </SelectPrimitive.Item>
             ))}
           </SelectPrimitive.Viewport>
-          <SelectPrimitive.ScrollDownButton className="select-scroll-button">▾</SelectPrimitive.ScrollDownButton>
+          <SelectPrimitive.ScrollDownButton className="select-scroll-button">
+            <Icon name="expand_more" size={18} />
+          </SelectPrimitive.ScrollDownButton>
         </SelectPrimitive.Content>
       </SelectPrimitive.Portal>
     </SelectPrimitive.Root>

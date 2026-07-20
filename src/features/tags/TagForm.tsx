@@ -87,7 +87,7 @@ export function TagForm({ onSubmit }: TagFormProps) {
       {error && <p style={{ color: "var(--accent-strong)" }}>{error}</p>}
 
       <button type="submit" className="btn btn--accent" disabled={!canSubmit}>
-        {submitting ? "Salvando…" : "Criar etiqueta"}
+        {submitting ? "Salvando…" : "+ Etiquetas"}
       </button>
     </form>
   );

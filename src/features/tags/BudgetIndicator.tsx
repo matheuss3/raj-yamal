@@ -1,4 +1,5 @@
 import type { Tag } from "../../../shared/types";
+import { Icon } from "../../components/Icon";
 import { formatCentsToBRL } from "../../utils/currency";
 
 interface BudgetIndicatorProps {
@@ -47,7 +48,7 @@ export function BudgetIndicator({ tag, spentCents, onViewDetails }: BudgetIndica
             aria-label={`Ver gastos detalhados de: ${tag.name}`}
             style={{ minHeight: "1.75rem", minWidth: "1.75rem", padding: "0.25rem", flexShrink: 0 }}
           >
-            🔍
+            <Icon name="search" size={16} />
           </button>
         </span>
       </div>

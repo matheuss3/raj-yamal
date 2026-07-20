@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { ReactNode } from "react";
+import { Icon } from "./Icon";
 
 interface ModalProps {
   open: boolean;
@@ -56,7 +57,7 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
           <h2 style={{ margin: 0, fontSize: "1.1rem" }}>{title}</h2>
           <button type="button" className="btn" onClick={onClose} aria-label="Fechar">
-            ×
+            <Icon name="close" />
           </button>
         </div>
         {children}
