@@ -6,9 +6,10 @@ interface TagPickerProps {
   selectedTagId: string | null;
   onSelect: (tagId: string | null) => void;
   ariaLabel?: string;
+  disabled?: boolean;
 }
 
-export function TagPicker({ tags, selectedTagId, onSelect, ariaLabel = "Etiqueta" }: TagPickerProps) {
+export function TagPicker({ tags, selectedTagId, onSelect, ariaLabel = "Etiqueta", disabled }: TagPickerProps) {
   return (
     // overflow-x: auto força overflow-y a "auto" também, o que corta o box-shadow
     // (3px 3px) do .btn na borda inferior/direita — a margem negativa compensa o
@@ -30,6 +31,7 @@ export function TagPicker({ tags, selectedTagId, onSelect, ariaLabel = "Etiqueta
         className="btn"
         aria-pressed={selectedTagId === null}
         onClick={() => onSelect(null)}
+        disabled={disabled}
         style={{
           flexShrink: 0,
           background: selectedTagId === null ? "var(--bg-2)" : undefined,
@@ -47,6 +49,7 @@ export function TagPicker({ tags, selectedTagId, onSelect, ariaLabel = "Etiqueta
             className="btn"
             aria-pressed={isSelected}
             onClick={() => onSelect(tag.id)}
+            disabled={disabled}
             style={{
               flexShrink: 0,
               display: "inline-flex",

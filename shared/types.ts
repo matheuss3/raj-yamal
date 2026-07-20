@@ -48,6 +48,7 @@ export interface NewTagInput {
 
 export interface UpdateTagInput extends NewTagInput {
   id: string;
+  archived: boolean;
 }
 
 export function createEmptyAccountData(accountHash: string): AccountData {

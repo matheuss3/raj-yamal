@@ -48,7 +48,9 @@ export default async (req: Request): Promise<Response> => {
           ...account,
           updatedAt: now,
           tags: account.tags.map((t) =>
-            t.id === input.id ? { ...t, name: input.name, color: input.color, monthlyBudget: input.monthlyBudget } : t,
+            t.id === input.id
+              ? { ...t, name: input.name, color: input.color, monthlyBudget: input.monthlyBudget, archived: input.archived }
+              : t,
           ),
         };
       });

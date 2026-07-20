@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { ConfirmDialog } from "../../components/ConfirmDialog";
 import { Icon } from "../../components/Icon";
+import { getActionLog, logAction, type ActionLogEntry } from "../../utils/actionLog";
+
+const logTimeFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
 
 interface AccountScreenProps {
   accountHash: string;
@@ -31,6 +34,13 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
   const [showRotateConfirm, setShowRotateConfirm] = useState(false);
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
 
+  const [actionLog, setActionLog] = useState<ActionLogEntry[]>(getActionLog);
+
+  function recordAction(message: string) {
+    logAction(message);
+    setActionLog(getActionLog());
+  }
+
   async function handleCopy() {
     try {
       await navigator.clipboard.writeText(accountHash);
@@ -50,6 +60,7 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
     try {
       await onSwitchAccount(otherHash);
       setOtherHash("");
+      recordAction("Trocou de conta");
     } catch (err) {
       setSwitchError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -65,6 +76,7 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
       await onRotateHash();
       setJustRotated(true);
       setRevealed(true);
+      recordAction("Gerou novo código de acesso");
     } catch (err) {
       setRotateError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -74,6 +86,7 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
 
   function confirmSignOut() {
     setShowSignOutConfirm(false);
+    logAction("Saiu deste dispositivo");
     onSignOut();
   }
 
@@ -181,6 +194,39 @@ export function AccountScreen({ accountHash, onSwitchAccount, onRotateHash, onSi
         <button type="button" className="btn" onClick={() => setShowSignOutConfirm(true)}>
           Sair deste dispositivo
         </button>
+      </section>
+
+      <section style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+        <h2 style={{ fontSize: "1.1rem", margin: 0 }}>Histórico local de ações</h2>
+        <p style={{ color: "var(--text-dim)", fontSize: "0.85rem", margin: 0 }}>
+          Registrado só neste dispositivo (localStorage) — não é sincronizado com o servidor.
+        </p>
+        {actionLog.length === 0 ? (
+          <p style={{ color: "var(--text-dim)" }}>Nenhuma ação registrada ainda.</p>
+        ) : (
+          <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            {actionLog.map((entry, index) => (
+              <li
+                key={`${entry.at}-${index}`}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: "0.5rem 0.75rem",
+                  flexWrap: "wrap",
+                  background: "var(--bg-1)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "0.6rem 0.85rem",
+                  fontSize: "0.85rem",
+                }}
+              >
+                <span style={{ minWidth: 0, overflowWrap: "break-word" }}>{entry.message}</span>
+                <span style={{ color: "var(--text-dim)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>
+                  {logTimeFormatter.format(new Date(entry.at))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <ConfirmDialog

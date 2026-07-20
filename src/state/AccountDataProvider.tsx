@@ -1,9 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import type { AccountData, NewPurchaseInput, NewTagInput, UpdatePurchaseInput } from "../../shared/types";
+import type { AccountData, NewPurchaseInput, NewTagInput, Tag, UpdatePurchaseInput } from "../../shared/types";
 import { createAccount, fetchAccount, fetchAccountByHash, rotateAccountHash } from "../api/account";
 import { ACCOUNT_HASH_STORAGE_KEY } from "../api/client";
 import { createPurchase, deletePurchase, updatePurchase as updatePurchaseApi } from "../api/purchases";
-import { archiveTag, createTag } from "../api/tags";
+import { archiveTag, createTag, updateTag } from "../api/tags";
 
 type AccountStatus = "loading" | "ready" | "error";
 
@@ -16,6 +16,7 @@ interface AccountContextValue {
   removePurchase: (id: string) => Promise<void>;
   addTag: (input: NewTagInput) => Promise<void>;
   removeTag: (id: string) => Promise<void>;
+  unarchiveTag: (tag: Tag) => Promise<void>;
   /** Troca para uma conta existente a partir de um hash de outro dispositivo. */
   switchAccount: (hash: string) => Promise<void>;
   /** Gera um novo hash para a conta atual, migrando os dados; retorna o novo hash. */
@@ -91,6 +92,17 @@ export function AccountDataProvider({ children }: { children: ReactNode }) {
     setData(result.data);
   }, []);
 
+  const unarchiveTag = useCallback(async (tag: Tag) => {
+    const result = await updateTag({
+      id: tag.id,
+      name: tag.name,
+      color: tag.color,
+      monthlyBudget: tag.monthlyBudget,
+      archived: false,
+    });
+    setData(result.data);
+  }, []);
+
   const switchAccount = useCallback(async (hash: string) => {
     const normalized = hash.trim();
     const result = await fetchAccountByHash(normalized);
@@ -121,6 +133,7 @@ export function AccountDataProvider({ children }: { children: ReactNode }) {
         removePurchase,
         addTag,
         removeTag,
+        unarchiveTag,
         switchAccount,
         rotateHash,
         signOut,

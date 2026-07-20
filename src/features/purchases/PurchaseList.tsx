@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Purchase, Tag } from "../../../shared/types";
+import { AsyncButton } from "../../components/AsyncButton";
 import { Icon } from "../../components/Icon";
 import { TagPicker } from "../tags/TagPicker";
 import { formatCentsToBRL } from "../../utils/currency";
@@ -7,12 +8,13 @@ import { formatCentsToBRL } from "../../utils/currency";
 interface PurchaseListProps {
   purchases: Purchase[];
   tags: Tag[];
-  onDelete: (id: string) => void;
-  onUpdateTag: (purchase: Purchase, tagId: string | null) => void;
+  onDelete: (purchase: Purchase) => Promise<unknown>;
+  onUpdateTag: (purchase: Purchase, tagId: string | null) => Promise<unknown>;
 }
 
 export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: PurchaseListProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [savingTag, setSavingTag] = useState(false);
 
   if (purchases.length === 0) {
     return <p style={{ color: "var(--text-dim)" }}>Nenhum gasto registrado neste mês.</p>;
@@ -20,6 +22,16 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
 
   const tagById = new Map(tags.map((tag) => [tag.id, tag]));
   const activeTags = tags.filter((tag) => !tag.archived);
+
+  async function handleSelectTag(purchase: Purchase, tagId: string | null) {
+    setSavingTag(true);
+    try {
+      await onUpdateTag(purchase, tagId);
+      setEditingId(null);
+    } finally {
+      setSavingTag(false);
+    }
+  }
 
   return (
     <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -66,14 +78,12 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
 
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
                 <strong style={{ fontFamily: "var(--font-mono)" }}>{formatCentsToBRL(purchase.amountCents)}</strong>
-                <button
-                  type="button"
-                  className="btn"
-                  onClick={() => onDelete(purchase.id)}
-                  aria-label={`Excluir gasto: ${purchase.description}`}
+                <AsyncButton
+                  onClick={() => onDelete(purchase)}
+                  ariaLabel={`Excluir gasto: ${purchase.description}`}
                 >
                   <Icon name="delete" size={18} />
-                </button>
+                </AsyncButton>
               </div>
             </div>
 
@@ -81,10 +91,8 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
               <TagPicker
                 tags={activeTags}
                 selectedTagId={purchase.tagId}
-                onSelect={(tagId) => {
-                  onUpdateTag(purchase, tagId);
-                  setEditingId(null);
-                }}
+                onSelect={(tagId) => handleSelectTag(purchase, tagId)}
+                disabled={savingTag}
                 ariaLabel={`Etiqueta de: ${purchase.description}`}
               />
             )}

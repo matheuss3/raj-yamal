@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { Icon } from "./Icon";
 import { Modal } from "./Modal";
 
 interface ConfirmDialogProps {
@@ -7,7 +9,7 @@ interface ConfirmDialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   danger?: boolean;
-  onConfirm: () => void;
+  onConfirm: () => void | Promise<void>;
   onCancel: () => void;
 }
 
@@ -21,20 +23,34 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
+  const [pending, setPending] = useState(false);
+
+  async function handleConfirm() {
+    if (pending) return;
+    setPending(true);
+    try {
+      await onConfirm();
+    } finally {
+      setPending(false);
+    }
+  }
+
   return (
-    <Modal open={open} onClose={onCancel} title={title}>
+    <Modal open={open} onClose={pending ? () => {} : onCancel} title={title}>
       <p style={{ margin: 0, color: "var(--text-dim)" }}>{message}</p>
       <div style={{ display: "flex", gap: "0.5rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
-        <button type="button" className="btn" onClick={onCancel}>
+        <button type="button" className="btn" onClick={onCancel} disabled={pending}>
           {cancelLabel}
         </button>
         <button
           type="button"
           className="btn btn--accent"
-          onClick={onConfirm}
+          onClick={handleConfirm}
+          disabled={pending}
+          aria-busy={pending}
           style={danger ? { background: "var(--accent-strong)" } : undefined}
         >
-          {confirmLabel}
+          {pending ? <Icon name="autorenew" size={18} spin /> : confirmLabel}
         </button>
       </div>
     </Modal>

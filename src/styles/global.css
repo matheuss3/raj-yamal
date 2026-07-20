@@ -98,6 +98,25 @@ a,
   color: #ffffff;
 }
 
+.btn[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.8;
+}
+
+/* ícone de carregamento (usado com o Material Icon "autorenew") */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
 /* Select customizado (Radix UI Select), mesma linguagem visual do .btn/inputs */
 .select-trigger {
   display: inline-flex;

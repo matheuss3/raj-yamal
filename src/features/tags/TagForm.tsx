@@ -1,13 +1,16 @@
 import { useState } from "react";
+import type { ReactNode } from "react";
 import type { NewTagInput } from "../../../shared/types";
 import { CurrencyInput } from "../../components/money/CurrencyInput";
 import { TAG_COLOR_PALETTE } from "./tagColors";
 
 interface TagFormProps {
   onSubmit: (input: NewTagInput) => Promise<unknown>;
+  /** Renderizado à direita do botão de submit (ex.: botão de ver arquivadas), ocupando 15% da linha. */
+  extraAction?: ReactNode;
 }
 
-export function TagForm({ onSubmit }: TagFormProps) {
+export function TagForm({ onSubmit, extraAction }: TagFormProps) {
   const [name, setName] = useState("");
   const [color, setColor] = useState<string>(TAG_COLOR_PALETTE[0]);
   const [budgetCents, setBudgetCents] = useState(0);
@@ -86,9 +89,12 @@ export function TagForm({ onSubmit }: TagFormProps) {
 
       {error && <p style={{ color: "var(--accent-strong)" }}>{error}</p>}
 
-      <button type="submit" className="btn btn--accent" disabled={!canSubmit}>
-        {submitting ? "Salvando…" : "+ Etiquetas"}
-      </button>
+      <div style={{ display: "flex", gap: "0.5rem" }}>
+        <button type="submit" className="btn btn--accent" disabled={!canSubmit} style={{ flex: "1 1 85%" }}>
+          {submitting ? "Salvando…" : "+ Etiquetas"}
+        </button>
+        {extraAction}
+      </div>
     </form>
   );
 }

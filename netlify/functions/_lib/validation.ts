@@ -102,9 +102,12 @@ export function validateNewTag(body: unknown): NewTagInput {
 
 export function validateUpdateTag(body: unknown): UpdateTagInput {
   const record = asRecord(body);
-  const { id } = record;
+  const { id, archived } = record;
   if (typeof id !== "string" || id.trim().length === 0) {
     throw new ValidationError("id é obrigatório");
   }
-  return { id, ...validateTagFields(record) };
+  if (typeof archived !== "boolean") {
+    throw new ValidationError("archived deve ser booleano");
+  }
+  return { id, archived, ...validateTagFields(record) };
 }

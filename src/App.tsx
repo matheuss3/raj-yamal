@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { NewPurchaseInput, Purchase } from "../shared/types";
+import type { NewPurchaseInput, NewTagInput, Purchase, Tag } from "../shared/types";
 import { AccountScreen } from "./features/account/AccountScreen";
 import { BudgetIndicator } from "./features/tags/BudgetIndicator";
 import { TagManager } from "./features/tags/TagManager";
@@ -10,6 +10,8 @@ import { PurchaseList } from "./features/purchases/PurchaseList";
 import { ThemeToggle } from "./features/theme/ThemeToggle";
 import { Modal } from "./components/Modal";
 import { AccountDataProvider, useAccountData } from "./state/AccountDataProvider";
+import { logAction } from "./utils/actionLog";
+import { formatCentsToBRL } from "./utils/currency";
 import { currentMonthKey, listAvailableMonths, monthKeyFromDate } from "./utils/date";
 
 type View = "purchases" | "tags" | "account";
@@ -45,6 +47,7 @@ function AppContent() {
     removePurchase,
     addTag,
     removeTag,
+    unarchiveTag,
     switchAccount,
     rotateHash,
     signOut,
@@ -83,6 +86,7 @@ function AppContent() {
     spentByTag.set(purchase.tagId, (spentByTag.get(purchase.tagId) ?? 0) + purchase.amountCents);
   }
   const tagsWithBudget = data.tags.filter((tag) => !tag.archived && tag.monthlyBudget != null);
+  const tagById = new Map(data.tags.map((tag) => [tag.id, tag]));
 
   const purchasesForList = purchaseListTagFilter
     ? purchasesOfMonth.filter((purchase) => purchase.tagId === purchaseListTagFilter)
@@ -93,17 +97,40 @@ function AppContent() {
 
   async function handleAddPurchase(input: NewPurchaseInput) {
     await addPurchase(input);
+    logAction(`Gasto adicionado: "${input.description}" (${formatCentsToBRL(input.amountCents)})`);
     setShowAddPurchase(false);
   }
 
-  function handleUpdatePurchaseTag(purchase: Purchase, tagId: string | null) {
-    return updatePurchase({
+  async function handleUpdatePurchaseTag(purchase: Purchase, tagId: string | null) {
+    await updatePurchase({
       id: purchase.id,
       description: purchase.description,
       amountCents: purchase.amountCents,
       date: purchase.date,
       tagId,
     });
+    const tagName = tagId ? (tagById.get(tagId)?.name ?? "etiqueta") : "sem etiqueta";
+    logAction(`Etiqueta do gasto "${purchase.description}" alterada para ${tagName}`);
+  }
+
+  async function handleDeletePurchase(purchase: Purchase) {
+    await removePurchase(purchase.id);
+    logAction(`Gasto excluído: "${purchase.description}" (${formatCentsToBRL(purchase.amountCents)})`);
+  }
+
+  async function handleCreateTag(input: NewTagInput) {
+    await addTag(input);
+    logAction(`Etiqueta criada: ${input.name}`);
+  }
+
+  async function handleArchiveTag(tag: Tag) {
+    await removeTag(tag.id);
+    logAction(`Etiqueta arquivada: ${tag.name}`);
+  }
+
+  async function handleUnarchiveTag(tag: Tag) {
+    await unarchiveTag(tag);
+    logAction(`Etiqueta desarquivada: ${tag.name}`);
   }
 
   function openPurchaseList(tagFilter: string | null) {
@@ -167,12 +194,19 @@ function AppContent() {
             onClose={() => setShowPurchaseList(false)}
             title={purchaseListTagName ? `Gastos: ${purchaseListTagName}` : "Gastos detalhados"}
           >
-            <PurchaseList purchases={purchasesForList} tags={data.tags} onDelete={removePurchase} onUpdateTag={handleUpdatePurchaseTag} />
+            <PurchaseList
+              purchases={purchasesForList}
+              tags={data.tags}
+              onDelete={handleDeletePurchase}
+              onUpdateTag={handleUpdatePurchaseTag}
+            />
           </Modal>
         </>
       )}
 
-      {view === "tags" && <TagManager tags={data.tags} onCreate={addTag} onArchive={removeTag} />}
+      {view === "tags" && (
+        <TagManager tags={data.tags} onCreate={handleCreateTag} onArchive={handleArchiveTag} onUnarchive={handleUnarchiveTag} />
+      )}
 
       {view === "account" && (
         <AccountScreen
