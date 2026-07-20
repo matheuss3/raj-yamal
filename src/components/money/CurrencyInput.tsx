@@ -71,7 +71,6 @@ export function CurrencyInput({ id, label, value, onChange, autoFocus }: Currenc
         onKeyDown={handleKeyDown}
         onChange={handleChange}
         style={{
-          fontFamily: "var(--font-mono)",
           fontSize: "1.25rem",
           textAlign: "right",
           background: "var(--bg-1)",
@@ -79,6 +78,7 @@ export function CurrencyInput({ id, label, value, onChange, autoFocus }: Currenc
           border: "none",
           borderRadius: "var(--radius-sm)",
           padding: "0.75rem 1rem",
+          width: "100%",
         }}
       />
     </label>

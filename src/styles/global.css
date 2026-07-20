@@ -116,7 +116,52 @@ a,
   animation: spin 0.8s linear infinite;
 }
 
-/* Select customizado (Radix UI Select), mesma linguagem visual do .btn/inputs */
+@keyframes modal-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* transição de passo do wizard de lançamento — direção acompanha avançar/voltar */
+@keyframes step-in-forward {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes step-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Select customizado (Radix UI Select), mesma linguagem visual do .btn/inputs.
+   Único lugar que ainda usa a fonte mono do ZeroDelay pros valores exibidos —
+   o resto da UI foi pra fonte sans (ver body em cima). */
 .select-trigger {
   display: inline-flex;
   align-items: center;
@@ -127,6 +172,7 @@ a,
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
   cursor: pointer;
+  font-family: var(--font-mono);
 }
 
 .select-content {
@@ -150,6 +196,7 @@ a,
   border-radius: var(--radius-sm);
   cursor: pointer;
   outline: none;
+  font-family: var(--font-mono);
 }
 
 .select-item[data-highlighted] {

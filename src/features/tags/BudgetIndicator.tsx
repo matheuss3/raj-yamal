@@ -38,7 +38,7 @@ export function BudgetIndicator({ tag, spentCents, onViewDetails }: BudgetIndica
           {tag.name}
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", overflowWrap: "break-word" }}>
+          <span style={{ fontSize: "0.85rem", overflowWrap: "break-word" }}>
             {formatCentsToBRL(spentCents)} / {formatCentsToBRL(tag.monthlyBudget)}
           </span>
           <button

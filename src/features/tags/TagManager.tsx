@@ -26,30 +26,26 @@ function TagRow({
     <li
       style={{
         display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "space-between",
-        alignItems: "center",
-        gap: "0.5rem 0.75rem",
+        flexDirection: "column",
+        gap: "0.4rem",
         background: "var(--bg-1)",
         borderRadius: "var(--radius-sm)",
         padding: "0.75rem 1rem",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 0, overflowWrap: "break-word" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
         <span
           aria-hidden="true"
-          style={{ width: "0.85rem", height: "0.85rem", borderRadius: "999px", background: tag.color, display: "inline-block" }}
+          style={{ width: "0.85rem", height: "0.85rem", borderRadius: "999px", background: tag.color, flexShrink: 0 }}
         />
-        <span>{tag.name}</span>
+        <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{tag.name}</span>
       </div>
 
-      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
-        {tag.monthlyBudget != null && (
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", color: "var(--text-dim)" }}>
-            {formatCentsToBRL(tag.monthlyBudget)}/mês
-          </span>
-        )}
-        <AsyncButton onClick={onAction} ariaLabel={`${actionLabel} etiqueta ${tag.name}`}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>
+        <span style={{ fontSize: "0.85rem", color: "var(--text-dim)", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {tag.monthlyBudget != null ? `${formatCentsToBRL(tag.monthlyBudget)}/mês` : ""}
+        </span>
+        <AsyncButton onClick={onAction} ariaLabel={`${actionLabel} etiqueta ${tag.name}`} style={{ flexShrink: 0, marginLeft: "auto" }}>
           {actionLabel}
         </AsyncButton>
       </div>

@@ -38,6 +38,7 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
         // campos de baixo atrás do teclado (problema com alignItems: center).
         overflowY: "auto",
         zIndex: 100,
+        animation: "modal-overlay-in 160ms var(--ease-standard)",
       }}
     >
       <div
@@ -58,6 +59,7 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
           flexDirection: "column",
           gap: "1rem",
           boxShadow: "3px 3px 0 0 #000",
+          animation: "modal-dialog-in 200ms var(--ease-standard)",
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "0.5rem" }}>

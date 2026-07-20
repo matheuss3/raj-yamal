@@ -13,7 +13,7 @@ export function MonthTotalCard({ totalCents }: { totalCents: number }) {
       }}
     >
       <span style={{ color: "var(--text-dim)", fontSize: "0.875rem" }}>Total do mês</span>
-      <strong style={{ fontFamily: "var(--font-mono)", fontSize: "1.75rem" }}>
+      <strong style={{ fontSize: "1.75rem" }}>
         {formatCentsToBRL(totalCents)}
       </strong>
     </div>

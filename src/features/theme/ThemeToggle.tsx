@@ -22,7 +22,7 @@ export function ThemeToggle() {
       onClick={toggleTheme}
       aria-label={`Alternar tema. Atual: ${LABEL[theme]}. Clique para trocar.`}
     >
-      <Icon name={ICON[theme]} size={18} /> {LABEL[theme]}
+      <Icon name={ICON[theme]} size={18} />
     </button>
   );
 }

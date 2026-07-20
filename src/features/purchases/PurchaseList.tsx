@@ -90,7 +90,7 @@ export function PurchaseList({ purchases, tags, onDelete, onUpdateTag }: Purchas
               </div>
 
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
-                <strong style={{ fontFamily: "var(--font-mono)" }}>{formatCentsToBRL(purchase.amountCents)}</strong>
+                <strong>{formatCentsToBRL(purchase.amountCents)}</strong>
                 <AsyncButton
                   onClick={() => onDelete(purchase)}
                   ariaLabel={`Excluir gasto: ${purchase.description}`}
