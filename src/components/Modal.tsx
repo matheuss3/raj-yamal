@@ -28,7 +28,7 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
         inset: 0,
         background: "rgba(0, 0, 0, 0.6)",
         display: "flex",
-        alignItems: "flex-end",
+        alignItems: "center",
         justifyContent: "center",
         padding: "1rem",
         zIndex: 100,

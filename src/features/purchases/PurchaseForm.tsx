@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { NewPurchaseInput, Tag } from "../../../shared/types";
 import { CurrencyInput } from "../../components/money/CurrencyInput";
+import { TagPicker } from "../tags/TagPicker";
 import { todayISODate } from "../../utils/date";
 
 interface PurchaseFormProps {
@@ -59,10 +60,6 @@ export function PurchaseForm({ tags, onSubmit }: PurchaseFormProps) {
       </label>
 
       <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-        <div style={{ flex: 1, minWidth: "8rem" }}>
-          <CurrencyInput id="purchase-amount" label="Valor" value={amountCents} onChange={setAmountCents} />
-        </div>
-
         <label htmlFor="purchase-date" style={{ flex: 1, minWidth: "8rem", display: "flex", flexDirection: "column", gap: "0.25rem" }}>
           Data
           <input
@@ -80,52 +77,16 @@ export function PurchaseForm({ tags, onSubmit }: PurchaseFormProps) {
             }}
           />
         </label>
+
+        <div style={{ flex: 1, minWidth: "8rem" }}>
+          <CurrencyInput id="purchase-amount" label="Valor" value={amountCents} onChange={setAmountCents} />
+        </div>
       </div>
 
       {activeTags.length > 0 && (
         <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem" }}>
           <span>Etiqueta</span>
-          <div role="group" aria-label="Etiqueta da compra" style={{ display: "flex", gap: "0.5rem", overflowX: "auto", minWidth: 0 }}>
-            <button
-              type="button"
-              className="btn"
-              aria-pressed={tagId === null}
-              onClick={() => setTagId(null)}
-              style={{
-                flexShrink: 0,
-                background: tagId === null ? "var(--bg-2)" : undefined,
-                border: tagId === null ? "2px solid var(--text-dim)" : undefined,
-              }}
-            >
-              Sem etiqueta
-            </button>
-            {activeTags.map((tag) => {
-              const isSelected = tag.id === tagId;
-              return (
-                <button
-                  key={tag.id}
-                  type="button"
-                  className="btn"
-                  aria-pressed={isSelected}
-                  onClick={() => setTagId(tag.id)}
-                  style={{
-                    flexShrink: 0,
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "0.4rem",
-                    background: isSelected ? "var(--bg-2)" : undefined,
-                    border: isSelected ? `2px solid ${tag.color}` : undefined,
-                  }}
-                >
-                  <span
-                    aria-hidden="true"
-                    style={{ width: "0.65rem", height: "0.65rem", borderRadius: "999px", background: tag.color, display: "inline-block" }}
-                  />
-                  {tag.name}
-                </button>
-              );
-            })}
-          </div>
+          <TagPicker tags={activeTags} selectedTagId={tagId} onSelect={setTagId} ariaLabel="Etiqueta da compra" />
         </div>
       )}
 

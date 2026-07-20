@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { NewPurchaseInput } from "../shared/types";
+import type { NewPurchaseInput, Purchase } from "../shared/types";
 import { AccountScreen } from "./features/account/AccountScreen";
 import { BudgetIndicator } from "./features/tags/BudgetIndicator";
 import { TagManager } from "./features/tags/TagManager";
@@ -36,12 +36,24 @@ function TabButton({ active, onClick, children }: { active: boolean; onClick: ()
 }
 
 function AppContent() {
-  const { status, error, data, addPurchase, removePurchase, addTag, removeTag, switchAccount, rotateHash, signOut } =
-    useAccountData();
+  const {
+    status,
+    error,
+    data,
+    addPurchase,
+    updatePurchase,
+    removePurchase,
+    addTag,
+    removeTag,
+    switchAccount,
+    rotateHash,
+    signOut,
+  } = useAccountData();
   const [selectedMonth, setSelectedMonth] = useState(currentMonthKey);
   const [view, setView] = useState<View>("purchases");
   const [showAddPurchase, setShowAddPurchase] = useState(false);
   const [showPurchaseList, setShowPurchaseList] = useState(false);
+  const [purchaseListTagFilter, setPurchaseListTagFilter] = useState<string | null>(null);
 
   if (status === "loading") {
     return (
@@ -72,9 +84,31 @@ function AppContent() {
   }
   const tagsWithBudget = data.tags.filter((tag) => !tag.archived && tag.monthlyBudget != null);
 
+  const purchasesForList = purchaseListTagFilter
+    ? purchasesOfMonth.filter((purchase) => purchase.tagId === purchaseListTagFilter)
+    : purchasesOfMonth;
+  const purchaseListTagName = purchaseListTagFilter
+    ? (data.tags.find((tag) => tag.id === purchaseListTagFilter)?.name ?? "")
+    : null;
+
   async function handleAddPurchase(input: NewPurchaseInput) {
     await addPurchase(input);
     setShowAddPurchase(false);
+  }
+
+  function handleUpdatePurchaseTag(purchase: Purchase, tagId: string | null) {
+    return updatePurchase({
+      id: purchase.id,
+      description: purchase.description,
+      amountCents: purchase.amountCents,
+      date: purchase.date,
+      tagId,
+    });
+  }
+
+  function openPurchaseList(tagFilter: string | null) {
+    setPurchaseListTagFilter(tagFilter);
+    setShowPurchaseList(true);
   }
 
   return (
@@ -99,7 +133,12 @@ function AppContent() {
           {tagsWithBudget.length > 0 && (
             <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               {tagsWithBudget.map((tag) => (
-                <BudgetIndicator key={tag.id} tag={tag} spentCents={spentByTag.get(tag.id) ?? 0} />
+                <BudgetIndicator
+                  key={tag.id}
+                  tag={tag}
+                  spentCents={spentByTag.get(tag.id) ?? 0}
+                  onViewDetails={() => openPurchaseList(tag.id)}
+                />
               ))}
             </div>
           )}
@@ -110,7 +149,7 @@ function AppContent() {
             <button type="button" className="btn btn--accent" onClick={() => setShowAddPurchase(true)}>
               + Novo gasto
             </button>
-            <button type="button" className="btn" onClick={() => setShowPurchaseList(true)}>
+            <button type="button" className="btn" onClick={() => openPurchaseList(null)}>
               Ver gastos detalhados
             </button>
           </div>
@@ -119,8 +158,12 @@ function AppContent() {
             <PurchaseForm tags={data.tags} onSubmit={handleAddPurchase} />
           </Modal>
 
-          <Modal open={showPurchaseList} onClose={() => setShowPurchaseList(false)} title="Gastos detalhados">
-            <PurchaseList purchases={purchasesOfMonth} tags={data.tags} onDelete={removePurchase} />
+          <Modal
+            open={showPurchaseList}
+            onClose={() => setShowPurchaseList(false)}
+            title={purchaseListTagName ? `Gastos: ${purchaseListTagName}` : "Gastos detalhados"}
+          >
+            <PurchaseList purchases={purchasesForList} tags={data.tags} onDelete={removePurchase} onUpdateTag={handleUpdatePurchaseTag} />
           </Modal>
         </>
       )}

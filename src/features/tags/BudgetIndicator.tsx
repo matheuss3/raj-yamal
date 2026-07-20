@@ -4,10 +4,11 @@ import { formatCentsToBRL } from "../../utils/currency";
 interface BudgetIndicatorProps {
   tag: Tag;
   spentCents: number;
+  onViewDetails: () => void;
 }
 
 /** Só faz sentido mostrar quando a etiqueta tem orçamento definido (monthlyBudget != null). */
-export function BudgetIndicator({ tag, spentCents }: BudgetIndicatorProps) {
+export function BudgetIndicator({ tag, spentCents, onViewDetails }: BudgetIndicatorProps) {
   if (tag.monthlyBudget == null) return null;
 
   const ratio = spentCents / tag.monthlyBudget;
@@ -35,8 +36,19 @@ export function BudgetIndicator({ tag, spentCents }: BudgetIndicatorProps) {
           />
           {tag.name}
         </span>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", minWidth: 0, overflowWrap: "break-word" }}>
-          {formatCentsToBRL(spentCents)} / {formatCentsToBRL(tag.monthlyBudget)}
+        <span style={{ display: "flex", alignItems: "center", gap: "0.5rem", minWidth: 0 }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", overflowWrap: "break-word" }}>
+            {formatCentsToBRL(spentCents)} / {formatCentsToBRL(tag.monthlyBudget)}
+          </span>
+          <button
+            type="button"
+            className="btn"
+            onClick={onViewDetails}
+            aria-label={`Ver gastos detalhados de: ${tag.name}`}
+            style={{ minHeight: "1.75rem", minWidth: "1.75rem", padding: "0.25rem", flexShrink: 0 }}
+          >
+            🔍
+          </button>
         </span>
       </div>
 

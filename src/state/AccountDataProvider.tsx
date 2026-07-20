@@ -1,8 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import type { AccountData, NewPurchaseInput, NewTagInput } from "../../shared/types";
+import type { AccountData, NewPurchaseInput, NewTagInput, UpdatePurchaseInput } from "../../shared/types";
 import { createAccount, fetchAccount, fetchAccountByHash, rotateAccountHash } from "../api/account";
 import { ACCOUNT_HASH_STORAGE_KEY } from "../api/client";
-import { createPurchase, deletePurchase } from "../api/purchases";
+import { createPurchase, deletePurchase, updatePurchase as updatePurchaseApi } from "../api/purchases";
 import { archiveTag, createTag } from "../api/tags";
 
 type AccountStatus = "loading" | "ready" | "error";
@@ -12,6 +12,7 @@ interface AccountContextValue {
   error?: string;
   data: AccountData | null;
   addPurchase: (input: NewPurchaseInput) => Promise<void>;
+  updatePurchase: (input: UpdatePurchaseInput) => Promise<void>;
   removePurchase: (id: string) => Promise<void>;
   addTag: (input: NewTagInput) => Promise<void>;
   removeTag: (id: string) => Promise<void>;
@@ -70,6 +71,11 @@ export function AccountDataProvider({ children }: { children: ReactNode }) {
     setData(result.data);
   }, []);
 
+  const updatePurchase = useCallback(async (input: UpdatePurchaseInput) => {
+    const result = await updatePurchaseApi(input);
+    setData(result.data);
+  }, []);
+
   const removePurchase = useCallback(async (id: string) => {
     const result = await deletePurchase(id);
     setData(result.data);
@@ -106,7 +112,19 @@ export function AccountDataProvider({ children }: { children: ReactNode }) {
 
   return (
     <AccountContext.Provider
-      value={{ status, error, data, addPurchase, removePurchase, addTag, removeTag, switchAccount, rotateHash, signOut }}
+      value={{
+        status,
+        error,
+        data,
+        addPurchase,
+        updatePurchase,
+        removePurchase,
+        addTag,
+        removeTag,
+        switchAccount,
+        rotateHash,
+        signOut,
+      }}
     >
       {children}
     </AccountContext.Provider>
